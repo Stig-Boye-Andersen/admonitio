@@ -7,7 +7,16 @@
         runs-on: ubuntu-latest
         steps:
           - name: Checkout repo content
-            uses: actions/checkout@v2
+            uses: actions/checkout@v3
+            with:
+              path: reminder
+
+          - name: Check out my other private repo
+            uses: actions/checkout@v3
+            with:
+              repository: Stig-Boye-Andersen/cardpsp
+              token: ${{ secrets.pat_cardpsp }}
+              path: cardpsp
 
           - name: Setup python
             uses: actions/setup-python@v4
@@ -20,7 +29,9 @@
               pip install -r py-requirements.txt
               
           - name: Execute py script
-            run: python check-reminders.py
+            env:
+              REPO: cardpsp
+            run: python reminder/check-reminders.py
 
             # - name: Execute py script
             # env:
