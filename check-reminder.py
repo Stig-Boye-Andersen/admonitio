@@ -1,6 +1,7 @@
 # import logging
 # import logging.handlers
-# import os
+import markdown
+import frontmatter
 
 # import requests
 
@@ -24,9 +25,19 @@
 #     #logger.info("Token not available!")
 #     #raise
 
-
 if __name__ == "__main__":
-    print('Hello world')
+    print("Hello, World!")
+
+    with open('reminders/cardpsp.md', 'r') as f:
+        markdown_string = f.read()
+        html_string = markdown.markdown(markdown_string)
+        print(html_string)
+
+    data = frontmatter.load('reminders/cardpsp.md')
+    print(data['reminder-date'])
+    print(data['remind'])
+    print(data.keys())
+
     # logger.info(f"Token value: {SOME_SECRET}")
 
     # r = requests.get('https://weather.talkpython.fm/api/weather/?city=Berlin&country=DE')
