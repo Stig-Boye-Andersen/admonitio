@@ -1,0 +1,18 @@
+---
+    name: Check reminders
+    
+    on: workflow_dispatch
+    
+    jobs:
+        check_reminders:
+            name: "Check reminders"
+            runs-on: ubuntu-22.04
+            steps:
+                - name: Markdown Meta
+                  uses: mheap/markdown-meta-action@v1
+                  id: meta
+                  with:
+                    file: ../../reminders/cardpsp.md
+
+                - name: Use the value
+                  run: echo "${{ steps.meta.output.reminder_date }}" 
