@@ -12,7 +12,7 @@
                   uses: mheap/markdown-meta-action@v1
                   id: meta
                   with:
-                    file: ../../reminders/cardpsp.md
+                    file: ./cardpsp.md
 
                 - name: Use the value
                   run: echo "${{ steps.meta.output.reminder_date }}" 
