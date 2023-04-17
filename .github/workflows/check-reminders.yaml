@@ -32,8 +32,3 @@
             env:
               REPO: cardpsp
             run: python reminder/check-reminders.py
-
-            # - name: Execute py script
-            # env:
-            #   SOME_SECRET: ${{ secrets.SOME_SECRET }}
-            # run: python main.py
