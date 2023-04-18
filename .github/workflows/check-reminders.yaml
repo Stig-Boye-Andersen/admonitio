@@ -30,5 +30,5 @@
               
           - name: Execute py script
             env:
-              REPO: cardpsp
+              REPOSITORIES: ${{ vars.REPOSITORIES }}
             run: python reminder/check-reminders.py

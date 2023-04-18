@@ -3,11 +3,14 @@
 import markdown
 import frontmatter
 import os
+import json
 
 if __name__ == "__main__":
-    repoName = os.environ["REPO"]
+    repositoriesString = os.environ["REPOSITORIES"]
+    repositoriesJSON = json.loads(repositoriesString)
 
-    data = frontmatter.load(repoName + '/reminders/client-secret.md')
+    print(repositoriesJSON[0]["name"])
+    #data = frontmatter.load(repoName + '/reminders/client-secret.md')
 
-    print(data['reminder-date'])
-    print(data['remind'])
+    #print(data['reminder-date'])
+    #print(data['remind'])
