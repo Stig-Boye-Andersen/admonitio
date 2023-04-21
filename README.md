@@ -6,7 +6,7 @@ In my team we often face situations where we have to remember to complete certai
 
 So far we've kept the reminder/notification functionality in one system and the documentation/guide in another system. It would be nice if they could be kept together?
 
-To add to that my team is far from the only team with this requirement and therefore I would be equally nice if this system could be easyli available to other teams in my organization.
+To add to that my team is far from the only team with this requirement and therefore it would be equally nice if this system could be easyli available to other teams in my organization.
 
 ## The solution
 
