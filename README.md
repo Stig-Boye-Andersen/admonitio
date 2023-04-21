@@ -21,7 +21,7 @@ reminder-date: 02.04.2027
 
 The xxx-client Azure app registration client secrets is updated by completing the following steps...
 ```
-Having the guide and related meta data connetected such as a reminder date configured we only need a component that can regularly go through that meta data a check whether a reminder should be generated. That component could be a GitHub workflow setup to run once a day (schedule trigger).
+Having the guide and related meta data connetected such as a reminder date we only need a component that can regularly go through that meta data and check whether a reminder should be generated. That component could be a GitHub workflow setup to run once a day (schedule trigger).
 
 ## Setup a virtual environment for your Python
 At the core of the reminder workflow sits a Python componet that regularly goes through all the configured Markdown documents and checks whether they have a remind date set, that is close enough for someone to get a reminder about it.
