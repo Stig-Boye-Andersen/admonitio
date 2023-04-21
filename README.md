@@ -1,9 +1,13 @@
 # Amonitio
 
-## The idea
-In my team we often face situations where we have to remember to complete certain tasks at a given time in the future. Often the tasks are complex and require a guide to complete.
+## The problem
+In my team we often face situations where we have to remember to complete certain tasks at a given time in the future. Often the tasks are complex and require a guide to complete. An example could be: "On the 2. of April 2027, update the 'xxx-client' Azure app registration client secret and related external C# services using that secret".
 
-So far we've kept the reminder/notification functionality in one system and the documentation/guide in another system. Wouldn't it be nice if those two things could be combined?
+So far we've kept the reminder/notification functionality in one system and the documentation/guide in another system. Wouldn't it be nice if those two things could be kept together?
+
+To add to that my team is far from the only team with this requirement and therefore I would be equally nice if this system could be easyli available to other teams in my organization.
+
+## The solution
 
 This is where GitHub comes to the rescue since it allows us to build a system where both the reminder and the guide is managed in the same system. To fulfill our requrements the system should be designed as follows:
 
