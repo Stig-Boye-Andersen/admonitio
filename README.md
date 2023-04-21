@@ -5,7 +5,7 @@ In my team we often face situations where we have to remember to complete certai
 
 So far we've kept the reminder/notification functionality in one system and the documentation/guide in another system. Wouldn't it be nice if those two things could be combined?
 
-This is where GitHub comes to the rescue since it allow us to build a system where both the reminder and the guide is managed in the same system. To fulfill our requrements the system should be designed as follows:
+This is where GitHub comes to the rescue since it allows us to build a system where both the reminder and the guide is managed in the same system. To fulfill our requrements the system should be designed as follows:
 
 The basic technical idea is base on Markdown documents and their Frontmatter feature. 
 
