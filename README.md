@@ -11,7 +11,7 @@ To add to that my team is far from the only team with this requirement and there
 ## The solution
 The following solution could solve the problem outlined above.
 
-First to keep the reminder and the guide together the guide should be written in Markdown. Writing the guide in markdown would allow us to add a front matter to the guide an thereby specify additional information related to the guide - for example reminder date. Below is a brief example of such a guide:
+First to keep the reminder and the guide together the guide should be written in Markdown. Writing the guide in Markdown would allow us add a so called 'front matter' to the guide an thereby specify additional information related to the guide. That addition informaiton could be a reminder date and other relevant information. Below is a brief example of such a guide:
 
 ```markdown
 ---
@@ -19,9 +19,9 @@ reminder-date: 02.04.2027
 ---
 # Update the xxx-client Azure app registration client secret
 
-The xxx-client Azure app registration client secrets is update by completing the following steps...
+The xxx-client Azure app registration client secrets is updated by completing the following steps...
 ```
-
+Having the guide and the related information such as reminder date setup, the only thing missing would be a components that will regularly go through all our guide and check for certain conditions that would trigger a reminder to be sent.
 
 ## Setup a virtual environment for your Python
 At the core of the reminder workflow sits a Python componet that regularly goes through all the configured Markdown documents and checks whether they have a remind date set, that is close enough for someone to get a reminder about it.
