@@ -1,4 +1,5 @@
 # Amonitio
+The Amonitio project is focused on creating a system that can solve the problem outlined below.
 
 ## The problem
 In my team we often face situations where we have to remember to complete certain tasks at a given time in the future. Often the tasks are complex and require a guide to complete. An example could be: "On the 2. of April 2027, update the 'xxx-client' Azure app registration client secret and related external C# services using that secret".
