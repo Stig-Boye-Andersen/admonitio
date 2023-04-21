@@ -15,7 +15,8 @@ First to keep the reminder and the guide together the guide should be written in
 
 ```markdown
 ---
-reminder-date: 02.04.2027
+amonitio:
+  reminder-date: 02.04.2027
 ---
 # Update the xxx-client Azure app registration client secret
 
