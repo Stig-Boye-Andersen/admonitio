@@ -4,15 +4,23 @@ The Amonitio project is focused on creating a system that can solve the problem 
 ## The problem
 In my team we often face situations where we have to remember to complete certain tasks at a given time in the future. Often the tasks are complex and require a guide to complete. An example could be: "On the 2. of April 2027, update the 'xxx-client' Azure app registration client secret and related external C# services using that secret".
 
-So far we've kept the reminder/notification functionality in one system and the documentation/guide in another system. It would be nice if they could be kept together?
+So far we've kept the reminder functionality in one system and the guide in another system. It would be nice if they could be kept together?
 
 To add to that my team is far from the only team with this requirement and therefore it would be equally nice if this system could be easily available to other teams in my organization.
 
 ## The solution
+The following solution could solve the problem outlined above.
 
-This is where GitHub comes to the rescue since it allows us to build a system where both the reminder and the guide is managed in the same system. To fulfill our requrements the system should be designed as follows:
+First to keep the reminder and the guide together the guide should be written in Markdown. Writing the guide in markdown would allow us to add a front matter to the guide an thereby specify additional information related to the guide - for example reminder date. Below is a brief example of such a guide:
 
-The basic technical idea is base on Markdown documents and their Frontmatter feature. 
+```markdown
+---
+reminder-date: 02.04.2027
+---
+# Update the xxx-client Azure app registration client secret
+
+The xxx-client Azure app registration client secrets is update by completing the following steps...
+```
 
 
 ## Setup a virtual environment for your Python
