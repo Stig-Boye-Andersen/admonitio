@@ -42,6 +42,11 @@ Activate the virtual environment by running this
 source venv/bin/activate
 ```
 
+Install the required packages by executing the following
+```cmd
+pip install -r py-requirements.txt
+```
+
 Now the virtual environment is active you can install external dependencies into it by running a statement like the following
 ```cmd
 python -m pip install markdown

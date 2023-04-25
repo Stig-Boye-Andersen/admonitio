@@ -9,7 +9,7 @@
           - name: Checkout repo content
             uses: actions/checkout@v3
             with:
-              path: reminder
+              path: admonitio
 
           - name: Check out my other private repo
             uses: actions/checkout@v3
@@ -26,9 +26,9 @@
           - name: Install python packages
             run: |
               python -m pip install --upgrade pip
-              pip install -r reminder/py-requirements.txt
+              pip install -r admonitio/py-requirements.txt
               
           - name: Execute py script
             env:
               REPOSITORIES: ${{ vars.REPOSITORIES }}
-            run: python reminder/check-reminders.py
+            run: python admonitio/check-reminders.py
