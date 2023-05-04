@@ -59,7 +59,7 @@ def parseMarkdownFiles(conn, markdownDirectory):
                 frontMatter = frontmatter.loads(f.read())
 
                 if hasValidAdmonitioFrontmatter(frontMatter):
-                    print('A valid Admonitio frontmatter found in ' + markdownDirectory + "/" + filename)
+                    #print('A valid Admonitio frontmatter found in ' + markdownDirectory + "/" + filename)
 
                     admonitioFrontMatter  = frontMatter.get('admonitio')
                     title = admonitioFrontMatter.get('title')
@@ -72,8 +72,8 @@ def parseMarkdownFiles(conn, markdownDirectory):
                     notifications = admonitioFrontMatter.get('notifications')    
                     for notification in notifications:
                         c.execute("INSERT INTO notifications(notification, reminder_id) VALUES(?, ?)", (notification, reminderId))
-                else:
-                    print('No valid Admonitio frontmatter found in ' + markdownDirectory + "/" + filename)
+                #else:
+                #    print('No valid Admonitio frontmatter found in ' + markdownDirectory + "/" + filename)
     conn.commit()
 
 if __name__ == "__main__":
@@ -91,14 +91,25 @@ if __name__ == "__main__":
         parseMarkdownFiles(conn, markdownDirectory)
 
     c = conn.cursor()
-    c.execute("SELECT title, dueDate, DATE(dueDate,'-' || notification || ' day') as notificationDay \
+    c.execute("SELECT title, dueDate, DATE(dueDate,'-' || notification || ' day') as notificationDay, notification, reminders.id \
                FROM reminders join notifications on reminders.id = notifications.reminder_id \
-               WHERE notificationDay >= date('now') \
+               WHERE notificationDay == date('now') \
                ORDER BY notificationDay ASC")
-    
-# Send a message to my slack channel called team-azure-services-notifications
-
 
     reminders = c.fetchall()
     for reminder in reminders:
-        print(reminder)
+        c.execute("SELECT notification \
+                   FROM notifications \
+                   WHERE reminder_id = ? AND DATE('now','+' || notification || ' day') < ?\
+                   ORDER BY notification desc", \
+                   (reminder[4], reminder[1]))
+        notifications = c.fetchall()
+
+        print('"' + reminder[0] + '" reminder is due on ' + reminder[1] + ' which is ' + str(reminder[3]) + ' days from now.')
+
+        #get length of notifications
+        if len(notifications) > 0:
+            for notification in notifications:
+                print('...a notification will be sent again ' + str(notification[0]) + ' days before the due date.')
+        else:
+            print('...no more notifications will be sent.')
