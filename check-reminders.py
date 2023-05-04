@@ -3,7 +3,7 @@ import frontmatter
 import os
 import json
 import sqlite3
-import datetime
+from datetime import datetime
 
 def getRepositories():
     with open('./admonitio/repositories.json', 'r') as f:
@@ -58,12 +58,16 @@ def parseMdFileAndInsertIntoDb(conn, directory):
                     if isAdmonitioFrontmatterValid(admonitioFrontMatter):
                         title = admonitioFrontMatter.get('title')
                         dueDate = admonitioFrontMatter.get('dueDate')
-                        c.execute("INSERT INTO reminders(title, dueDate) VALUES(?, ?)", (title, dueDate))
+                        convertedDueDate = datetime.strptime(dueDate, '%d.%m.%Y')
+
+                        c.execute("INSERT INTO reminders(title, dueDate) VALUES(?, ?)", (title, convertedDueDate.strftime('%Y-%m-%d')))
 
                         reminderId = c.lastrowid
                         notifications = admonitioFrontMatter.get('notifications')    
                         for notification in notifications:
                             c.execute("INSERT INTO notifications(notification, reminder_id) VALUES(?, ?)", (notification, reminderId))
+                    else:
+                        print('Invalid Admonitio frontmatter for document: ' + filename)
     conn.commit()
 
 if __name__ == "__main__":
@@ -74,7 +78,9 @@ if __name__ == "__main__":
     for repo in repositories:
         parseMdFileAndInsertIntoDb(conn, repo.get('name'))
 
-    #Select the reminder that will expire first 
+    #select all reminders and calculate when the 
     c = conn.cursor()
-    c.execute("SELECT title, dueDate, notification as notificationDate FROM reminders join notifications on reminders.id = notifications.reminder_id")
+    c.execute("SELECT title, dueDate, DATE(dueDate,'-' || notification || ' day') as notificationDay \
+               FROM reminders join notifications on reminders.id = notifications.reminder_id \
+               ORDER BY notificationDay ASC")
     print(c.fetchall())
