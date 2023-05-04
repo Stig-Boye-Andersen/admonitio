@@ -7,10 +7,10 @@ from datetime import datetime
 
 
 # Reads all the repositories 
-def loadAndValidateRepositoriesCofiguration():
-    with open('./admonitio/repositories.json', 'r') as f:
-        repositoriesJSON = f.read()
-        return json.loads(repositoriesJSON)
+def loadAndValidateCofiguration(baseDirectoryPath):
+    with open(baseDirectoryPath + '/configuration.json', 'r') as f:
+        configurationJSON = f.read()
+        return json.loads(configurationJSON)
 
     
 
@@ -80,14 +80,15 @@ if __name__ == "__main__":
     conn = createDatabase()
     createTables(conn)
 
-    repositories = loadAndValidateRepositoriesCofiguration()
+    baseDirectoryPath = "./admonitio"
+    configuration = loadAndValidateCofiguration(baseDirectoryPath)
+
+    repositories = configuration.get('repositories')
     for repository in repositories:
         markdownDirectory = repository.get('name') + '/docs'
         print('Parsing all markdown files in repo ' + repository.get('name') + ' under ' + markdownDirectory)
 
-        
         parseMarkdownFiles(conn, markdownDirectory)
-
 
     c = conn.cursor()
     c.execute("SELECT title, dueDate, DATE(dueDate,'-' || notification || ' day') as notificationDay \
@@ -95,6 +96,9 @@ if __name__ == "__main__":
                WHERE notificationDay >= date('now') \
                ORDER BY notificationDay ASC")
     
+# Send a message to my slack channel called team-azure-services-notifications
+
+
     reminders = c.fetchall()
     for reminder in reminders:
         print(reminder)
