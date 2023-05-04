@@ -93,23 +93,24 @@ if __name__ == "__main__":
     c = conn.cursor()
     c.execute("SELECT title, dueDate, DATE(dueDate,'-' || notification || ' day') as notificationDay, notification, reminders.id \
                FROM reminders join notifications on reminders.id = notifications.reminder_id \
-               WHERE notificationDay == date('now') \
+               WHERE notificationDay == date('2025-03-28') \
                ORDER BY notificationDay ASC")
 
     reminders = c.fetchall()
     for reminder in reminders:
         c.execute("SELECT notification \
                    FROM notifications \
-                   WHERE reminder_id = ? AND DATE('now','+' || notification || ' day') < ?\
+                   WHERE reminder_id = ? AND DATE('2025-03-28','+' || notification || ' day') < ?\
                    ORDER BY notification desc", \
                    (reminder[4], reminder[1]))
         notifications = c.fetchall()
 
-        print('"' + reminder[0] + '" reminder is due on ' + reminder[1] + ' which is ' + str(reminder[3]) + ' days from now.')
+        reminderMessage = '"' + reminder[0] + '" reminder is due on ' + reminder[1] + ' which is ' + str(reminder[3]) + ' days from now.\n'
 
-        #get length of notifications
         if len(notifications) > 0:
             for notification in notifications:
-                print('...a notification will be sent again ' + str(notification[0]) + ' days before the due date.')
+                reminderMessage = reminderMessage + '...a new notification will be sent ' + str(notification[0]) + ' days before the due date.\n'
         else:
-            print('...no more notifications will be sent.')
+            reminderMessage = reminderMessage + '...no notifications will be sent.'
+
+        print(reminderMessage)
