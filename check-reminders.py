@@ -24,6 +24,24 @@ def createTables(conn):
     c.execute('''CREATE TABLE notifications(id integer primary key, notification integer, reminder_id integer, FOREIGN KEY(reminder_id) REFERENCES reminders(id))''')
     conn.commit()
 
+def hasAdmonitioFrontmatter(mdFrontmatter):
+    if not mdFrontmatter.get('admonitio'):
+        return False
+    
+    return True
+
+def isAdmonitioFrontmatterValid(admonitioFrontmatter):
+    if not admonitioFrontmatter.get('title'):
+        return False
+
+    if not admonitioFrontmatter.get('dueDate'):
+        return False
+
+    if not admonitioFrontmatter.get('notifications'):
+        return False
+
+    return True
+
 #Parse md files and insert into database
 def parseMdFileAndInsertIntoDb(conn, directory):
     c = conn.cursor()
@@ -33,17 +51,19 @@ def parseMdFileAndInsertIntoDb(conn, directory):
     for filename in os.listdir(docsDirectory):
         if filename.endswith('.md'):
             with open(docsDirectory + '/' + filename, 'r') as f:
-                mdContent = f.read()
-                mdFrontmatter = frontmatter.loads(mdContent)
+                frontMatter = frontmatter.loads(f.read())
 
-                title = mdFrontmatter.get('title')
-                dueDate = mdFrontmatter.get('dueDate')
-                c.execute("INSERT INTO reminders(title, dueDate) VALUES(?, ?)", (title, dueDate))
+                if hasAdmonitioFrontmatter(frontMatter):
+                    admonitioFrontMatter  = frontMatter.get('admonitio')
+                    if isAdmonitioFrontmatterValid(admonitioFrontMatter):
+                        title = admonitioFrontMatter.get('title')
+                        dueDate = admonitioFrontMatter.get('dueDate')
+                        c.execute("INSERT INTO reminders(title, dueDate) VALUES(?, ?)", (title, dueDate))
 
-                reminderId = c.lastrowid
-                notifications = mdFrontmatter.get('notifications')    
-                for notification in notifications:
-                    c.execute("INSERT INTO notifications(notification, reminder_id) VALUES(?, ?)", (notification, reminderId))
+                        reminderId = c.lastrowid
+                        notifications = admonitioFrontMatter.get('notifications')    
+                        for notification in notifications:
+                            c.execute("INSERT INTO notifications(notification, reminder_id) VALUES(?, ?)", (notification, reminderId))
     conn.commit()
 
 if __name__ == "__main__":
@@ -56,5 +76,5 @@ if __name__ == "__main__":
 
     #Select the reminder that will expire first 
     c = conn.cursor()
-    c.execute("SELECT title, dueDate as notificationDate FROM reminders join notifications on reminders.id = notifications.reminder_id")
+    c.execute("SELECT title, dueDate, notification as notificationDate FROM reminders join notifications on reminders.id = notifications.reminder_id")
     print(c.fetchall())
