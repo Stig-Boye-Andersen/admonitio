@@ -1,2 +1,5 @@
 markdown==3.4.3
 python-frontmatter==1.0.0
+requests==2.30.0
+azure_keyvault_secrets==4.7.0
+azure_identity==1.12.0

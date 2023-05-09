@@ -1,5 +1,8 @@
 {
     "repositories":[
-        {"name":"cardpsp"}
+        {
+            "name":"cardpsp",
+            "slack-channels":["#team-azure-services-notifications"]
+        }
     ]
 }

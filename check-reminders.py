@@ -3,8 +3,14 @@ import frontmatter
 import os
 import json
 import sqlite3
+import requests
 from datetime import datetime
+from azure.keyvault.secrets import SecretClient
+from azure.identity import DefaultAzureCredential
 
+keyVaultName = "mim-vault"
+secretName = "mr-monitor-confluence-api-token"
+secretName_sam="slack-bot-sam-api-token"
 
 # Reads all the repositories 
 def loadAndValidateCofiguration(baseDirectoryPath):
@@ -48,6 +54,29 @@ def hasValidAdmonitioFrontmatter(frontMatter):
 def isAdmonitioFrontmatterValid(admonitioFrontmatter):
     
     return True
+
+def sendSlackMessage(channelId, message):
+    print('Sending slack message to ' + channelId + ' with message:\n\n' + message)
+
+    credential = DefaultAzureCredential()
+    KVUri = "https://" + keyVaultName + ".vault.azure.net"
+    client = SecretClient(vault_url=KVUri, credential=credential)
+    retrieved_secret = client.get_secret(secretName)
+    sam_bot_token=client.get_secret(secretName_sam)
+    samBotTokenValue=sam_bot_token.value
+
+    url_slack_post = "https://slack.com/api/chat.postMessage"
+    slack_headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer '+samBotTokenValue
+    }
+
+    params = {
+            "channel": channelId,
+            "text": message
+    }
+
+    requests.get(url_slack_post, headers=slack_headers, params=params)
 
 # Parse md files and insert into database
 def parseMarkdownFiles(conn, markdownDirectory):
@@ -95,8 +124,8 @@ if __name__ == "__main__":
                FROM reminders join notifications on reminders.id = notifications.reminder_id \
                WHERE notificationDay == date('2025-03-28') \
                ORDER BY notificationDay ASC")
-
     reminders = c.fetchall()
+
     for reminder in reminders:
         c.execute("SELECT notification \
                    FROM notifications \
@@ -113,4 +142,6 @@ if __name__ == "__main__":
         else:
             reminderMessage = reminderMessage + '...no notifications will be sent.'
 
-        print(reminderMessage)
+        slackChannels = repository.get('slack-channels')
+        for slackChannel in slackChannels:
+            sendSlackMessage(slackChannel, reminderMessage)
